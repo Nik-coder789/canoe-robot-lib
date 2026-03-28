@@ -1,0 +1,8 @@
+build/
+dist/
+*.egg-info/
+**pycache**/
+*.pyc
+output.html
+.vscode/
+.env
