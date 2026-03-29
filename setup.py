@@ -1,8 +1,11 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r", encoding="utf-8") as f:
+    long_description = f.read()
+
 setup(
     name="canoe-robot-lib",
-    version="0.1",
+    version="0.3",
     packages=find_packages(),
     install_requires=[
         "robotframework",
@@ -10,5 +13,15 @@ setup(
     ],
     author="Naresh Kothari",
     description="Robot Framework library for CANoe automation",
-    python_requires=">=3.8",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+
+    url="https://github.com/Nik-coder789/canoe-robot-lib",
+    project_urls={
+        "Homepage": "https://github.com/Nik-coder789/canoe-robot-lib",
+        "Repository": "https://github.com/Nik-coder789/canoe-robot-lib",
+    },
+
+    keywords=["canoe", "robot framework", "automation", "automotive"],
+    python_requires=">=3.7",
 )

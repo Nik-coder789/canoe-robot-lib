@@ -40,7 +40,8 @@ class CanoeLibrary:
     def send_diagreq(self,Ecu_qualifier_name,Request):
         if not all([Ecu_qualifier_name,Request]):
             raise Exception("Both parameters (Ecu_qualifier_name,Request) are required in str format")
-        self.canoe.send_diag_request(Ecu_qualifier_name,Request,True)
+        resp=self.canoe.send_diag_request(Ecu_qualifier_name,Request,True)
+        self.last_resp=resp
         print(f"[INFO] Request sent --> {Request}")
 
     @keyword("Set Environment_Variable")
@@ -109,4 +110,46 @@ class CanoeLibrary:
     @keyword("Write")
     def write_txt(self,text:str):
         self.canoe.write_text_in_write_window(text)
-        
+    
+    @keyword("Validate Signal value")
+    def validate(self,bus, channel, message, signal,expected_value):
+        if bus is None or channel is None or message is None or signal is None or expected_value is None:
+            raise Exception("All parameters (bus, channel, message, signal, expected_value) are required")
+        val=self.canoe.get_signal_value(bus,channel,message,signal)
+        if float(val)!=float(expected_value):
+            raise Exception(f"Signal {signal} expected {expected_value} but got {val}")
+        print(f"[PASS] {signal} == {expected_value}")
+    
+    @keyword("Get diagresp")
+    def check_rsp(self):
+        if not hasattr(self, "last_resp"):
+            raise Exception("No diagnostic response available. Run Send diagReq first.")
+        actual=self.last_resp
+        return actual
+    
+    @keyword("Validate diagresp")
+    def val_rsp(self,expected_resp):
+        if not hasattr(self, "last_resp"):
+            raise Exception("No diagnostic response available. Run Send diagReq first.")
+        actual=self.last_resp
+        if actual != expected_resp:
+            raise Exception(f"Expected {expected_resp}, but got {actual}")
+        print(f"[PASS] Diagnostic response matched: {actual}")
+    
+    @keyword("Validate Env_var value")
+    def val_envar(self,env_var_name,expected_value):
+        if env_var_name is None or expected_value is None:
+            raise Exception("env_var_name,expected_Value both are required")
+        value=self.canoe.get_environment_variable_value(env_var_name)
+        if float(value)!=float(expected_value):
+            raise Exception(f"Variable {env_var_name} expected {expected_value} but got {value}")
+        print(f"[PASS] {env_var_name} == {expected_value}")
+    
+    @keyword("Validate Sys_var value")
+    def val_sysvar(self,sys_var_name,expected_value):
+        if sys_var_name is None or expected_value is None:
+            raise Exception("env_var_name,expected_Value both are required")
+        value=self.canoe.get_system_variable_value(sys_var_name)
+        if float(value)!=float(expected_value):
+            raise Exception(f"Variable {sys_var_name} expected {expected_value} but got {value}")
+        print(f"[PASS] {sys_var_name} == {expected_value}")
