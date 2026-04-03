@@ -167,3 +167,83 @@ Writes text in CANoe Write Window.
 Arguments:
 
 * text (str)
+
+---
+
+## 📡 Validate Signal value
+
+Validates whether a signal matches the expected value.
+
+Arguments:
+
+* bus (str)
+* channel (int)
+* message (str)
+* signal (str)
+* expected_value
+
+Behavior:
+
+* Passes if signal value matches expected value
+* Fails if mismatch
+
+---
+
+## 🔍 Get diagresp
+
+Returns the last diagnostic response received.
+
+Usage:
+
+* Must be used after `Send diagReq`
+
+Returns:
+
+* Diagnostic response
+
+---
+
+## 🔍 Validate diagresp
+
+Validates the diagnostic response against expected value.
+
+Arguments:
+
+* expected_resp (str)
+
+Behavior:
+
+* Passes if response matches
+* Fails if mismatch
+
+---
+
+## 🌐 Validate Env_var value
+
+Validates environment variable value.
+
+Arguments:
+
+* env_var_name (str)
+* expected_value
+
+Behavior:
+
+* Passes if value matches
+* Fails if mismatch
+
+---
+
+## ⚙️ Validate Sys_var value
+
+Validates system variable value.
+
+Arguments:
+
+* sys_var_name (str)
+* expected_value
+
+Behavior:
+
+* Passes if value matches
+* Fails if mismatch
