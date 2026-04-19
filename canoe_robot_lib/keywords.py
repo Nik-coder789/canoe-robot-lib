@@ -1,5 +1,7 @@
 from robot.api.deco import keyword
 from py_canoe import CANoe
+import cantools
+import os
 class CanoeLibrary:
 
     def __init__(self):
@@ -153,3 +155,18 @@ class CanoeLibrary:
         if float(value)!=float(expected_value):
             raise Exception(f"Variable {sys_var_name} expected {expected_value} but got {value}")
         print(f"[PASS] {sys_var_name} == {expected_value}")
+   
+    @keyword("Generate DBC Resource")
+    def generate_dbc_resource(self, dbc_path):
+        db = cantools.database.load_file(dbc_path)
+        base_name = os.path.splitext(os.path.basename(dbc_path))[0]
+        output_dir = "Resources"  
+        os.makedirs(output_dir, exist_ok=True)
+        output_file = os.path.join(output_dir, f"{base_name}.resource")
+        with open(output_file, "w") as f:
+            f.write("*** Variables ***\n\n")
+            for msg in db.messages:
+                f.write(f"${{MSG_{msg.name.upper()}}}    {msg.name}\n")
+                for sig in msg.signals:
+                    f.write(f"${{SIG_{sig.name.upper()}}}    {sig.name}\n")
+        print(f"[INFO] Resource file generated: {output_file}")

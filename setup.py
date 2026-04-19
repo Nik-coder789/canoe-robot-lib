@@ -5,11 +5,12 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="canoe-robot-lib",
-    version="0.3",
+    version="0.5",
     packages=find_packages(),
     install_requires=[
         "robotframework",
-        "py_canoe"
+        "py_canoe",
+        "cantools"
     ],
     author="Naresh Kothari",
     description="Robot Framework library for CANoe automation",

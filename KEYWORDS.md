@@ -4,6 +4,22 @@ This document describes all available keywords and their usage.
 
 ---
 
+## 📦 Generate DBC Resource
+
+Generates a Robot Framework `.resource` file from a DBC file.
+This will give a drop down of your Msgs & signals while writing Test cases.
+
+Arguments:
+
+* dbc_path (str): Path to DBC file
+
+Returns:
+
+* Resource file -- include that resource file in your robot file as below
+Resource  ../Resources/Generated_file.resource
+
+---
+
 ## ▶️ Start CANoe
 
 Start CANoe with given configuration file.
