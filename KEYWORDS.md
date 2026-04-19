@@ -16,7 +16,7 @@ Arguments:
 Returns:
 
 * Resource file -- include that resource file in your robot file as below
-Resource  ../Resources/Generated_file.resource
+* Resource  ../Resources/Generated_file.resource
 
 ---
 
