@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="canoe-robot-lib",
-    version="0.5",
+    version="0.6",
     packages=find_packages(),
     install_requires=[
         "robotframework",

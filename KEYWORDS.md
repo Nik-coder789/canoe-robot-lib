@@ -36,6 +36,12 @@ Stops CANoe measurement.
 
 ---
 
+## 💾 Save Configuration
+
+Saves the active configuration.
+
+---
+
 ## 📡 Get Signal
 
 Reads a signal value from CAN bus.

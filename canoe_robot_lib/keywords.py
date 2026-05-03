@@ -2,6 +2,7 @@ from robot.api.deco import keyword
 from py_canoe import CANoe
 import cantools
 import os
+import win32com.client
 class CanoeLibrary:
 
     def __init__(self):
@@ -170,3 +171,9 @@ class CanoeLibrary:
                 for sig in msg.signals:
                     f.write(f"${{SIG_{sig.name.upper()}}}    {sig.name}\n")
         print(f"[INFO] Resource file generated: {output_file}")
+    
+    @keyword("Save Configuration")
+    def save_cfg(self):
+        canoe_app=win32com.client.Dispatch("CANoe.Application")
+        canoe_app.Configuration.Save()
+        print(f"[INF0] Configurarion Saved")
