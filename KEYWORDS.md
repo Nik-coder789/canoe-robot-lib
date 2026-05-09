@@ -269,3 +269,18 @@ Behavior:
 
 * Passes if value matches
 * Fails if mismatch
+
+---
+
+## 📸 Capture Image
+
+Capture & compare with the reference image.
+
+Arguments:
+
+* Reference Image path
+
+Behavior:
+
+* Passes if images match
+* Fails if mismatch

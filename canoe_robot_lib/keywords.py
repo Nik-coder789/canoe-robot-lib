@@ -1,7 +1,11 @@
 from robot.api.deco import keyword
+from robot.api import logger
+from robot.api import Failure
 from py_canoe import CANoe
 import cantools
-import os
+import os,cv2,time
+import numpy as np
+from datetime import datetime
 import win32com.client
 class CanoeLibrary:
 
@@ -177,3 +181,47 @@ class CanoeLibrary:
         canoe_app=win32com.client.Dispatch("CANoe.Application")
         canoe_app.Configuration.Save()
         print(f"[INF0] Configurarion Saved")
+    
+    @keyword("Capture Image")
+    def image_cmp(self,ref_img_path):
+        cap=cv2.VideoCapture(0)
+        ret,frame=cap.read()
+        folder_path= os.path.join(os.getcwd(),"Capture Images")
+        os.makedirs(folder_path,exist_ok=True)
+        if ret:
+            cv2.imwrite(os.path.join(folder_path, "Actual.png"),frame)
+        else:
+            print("Failed to capture image")
+        r=cv2.imread(ref_img_path,cv2.IMREAD_COLOR)
+        a=cv2.imread(os.path.join(folder_path, "Actual.png"),cv2.IMREAD_COLOR)
+        r_gray=cv2.cvtColor(r, cv2.COLOR_BGR2GRAY)
+        a_gray=cv2.cvtColor(a, cv2.COLOR_BGR2GRAY)
+        diff=cv2.absdiff(a_gray,r_gray)
+        mean_diff=np.mean(diff)
+        cv2.putText(r,'Reference Image',(40,80), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 255, 0), 4)
+        cv2.putText(a,'Actual Image',(40,80), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0, 0, 255), 4)
+        if mean_diff<2:
+            print("Images are same")
+            result=True
+        else:
+            print('Mismatch occured in images')
+            result=False
+            _, thresh = cv2.threshold(diff, 30, 255, cv2.THRESH_BINARY)
+            contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            for cnt in contours:
+                x, y, w, h = cv2.boundingRect(cnt)
+                if w * h < 500:
+                    continue 
+                #cv2.rectangle(r, (x, y), (x + w, y + h), (0, 255, 0), 3)
+                cv2.rectangle(a, (x, y), (x + w, y + h), (0, 255, 0), 3)
+        now=datetime.now()
+        s_by_s=np.hstack((r,a))
+        result_path= os.path.join(os.getcwd(),"Comparison Images")
+        os.makedirs(result_path,exist_ok=True)
+        path=os.path.join(result_path,f"comparison_Image_{now.strftime("%Y%m%d_%H%M%S")}.png")
+        cv2.imwrite(path,s_by_s)
+        time.sleep(3)
+        logger.info(f'<img src="file:///{path}" width="400">', html=True)
+        if not result:
+            raise Failure("Image comparison failed")
+        return result,path
