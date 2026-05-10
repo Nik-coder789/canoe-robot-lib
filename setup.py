@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="canoe-robot-lib",
-    version="0.7",
+    version="0.8s",
     packages=find_packages(),
     install_requires=[
         "robotframework",
@@ -19,6 +19,7 @@ setup(
 
     url="https://github.com/Nik-coder789/canoe-robot-lib",
     project_urls={
+        "Documentation":"https://github.com/Nik-coder789/canoe-robot-lib/blob/main/KEYWORDS.md",
         "Homepage": "https://github.com/Nik-coder789/canoe-robot-lib",
         "Repository": "https://github.com/Nik-coder789/canoe-robot-lib",
     },

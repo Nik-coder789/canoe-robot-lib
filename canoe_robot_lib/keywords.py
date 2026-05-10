@@ -132,16 +132,24 @@ class CanoeLibrary:
         if not hasattr(self, "last_resp"):
             raise Exception("No diagnostic response available. Run Send diagReq first.")
         actual=self.last_resp
+        print(f"Diagnostic response: {actual}")
         return actual
     
     @keyword("Validate diagresp")
     def val_rsp(self,expected_resp):
         if not hasattr(self, "last_resp"):
             raise Exception("No diagnostic response available. Run Send diagReq first.")
-        actual=self.last_resp
-        if actual != expected_resp:
-            raise Exception(f"Expected {expected_resp}, but got {actual}")
-        print(f"[PASS] Diagnostic response matched: {actual}")
+        actual =self.last_resp.strip().split()
+        expected = expected_resp.strip().split()
+        if len(expected) > len(actual):
+            raise Exception(f"Expected response has more bytes than actual response")
+        for i in range(len(expected)):
+            if expected[i].upper() == "XX":
+                continue
+            if actual[i].upper() != expected[i].upper():
+                print(f"Diagnostic response: {self.last_resp}")
+                raise Exception(f"Mismatch at byte {i}: expected {expected[i]} but got {actual[i]}" )
+        print(f"[PASS] Diagnostic response matched: {' '.join(actual)}")
     
     @keyword("Validate Env_var value")
     def val_envar(self,env_var_name,expected_value):

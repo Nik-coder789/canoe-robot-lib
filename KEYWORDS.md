@@ -232,6 +232,13 @@ Validates the diagnostic response against expected value.
 Arguments:
 
 * expected_resp (str)
+    expected_resp can be provided completely or partially using `XX` as wildcard bytes.
+  Examples:
+  1. `50 01 02 03 04`
+     → Validates the complete response.
+
+  2. `50 01 02 XX`
+     → Validates only the specified bytes. `XX` means "don't care".
 
 Behavior:
 
